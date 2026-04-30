@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="MedCore HMS - Professional Hospital Management System Dashboard">
+  <title>MedCore HMS - Hospital Management System</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+</head>
+<body>
+
+<!-- ===== SIDEBAR ===== -->
+<aside class="sidebar" id="sidebar">
+  <a href="#" class="sidebar-brand">
+    <div class="brand-icon"><i class="fas fa-heartbeat"></i></div>
+    <span>MedCore HMS</span>
+  </a>
+  <nav class="sidebar-nav">
+    <div class="nav-section">Main</div>
+    <a class="nav-item active" data-page="dashboard"><i class="fas fa-th-large"></i> Dashboard</a>
+    <a class="nav-item" data-page="patients"><i class="fas fa-users"></i> Patients</a>
+    <a class="nav-item" data-page="doctors"><i class="fas fa-user-md"></i> Doctors</a>
+    <a class="nav-item" data-page="appointments"><i class="fas fa-calendar-check"></i> Appointments</a>
+    <a class="nav-item" data-page="prescriptions"><i class="fas fa-prescription-bottle-alt"></i> Prescriptions</a>
+    <div class="nav-section">Finance</div>
+    <a class="nav-item" data-page="billing"><i class="fas fa-file-invoice-dollar"></i> Billing</a>
+    <a class="nav-item" data-page="reports"><i class="fas fa-chart-bar"></i> Reports</a>
+  </nav>
+  <div class="sidebar-footer">
+    <div class="avatar">M</div>
+    <div class="user-info">
+      <div class="name">mugesh</div>
+      <div class="role">Admin</div>
+    </div>
+  </div>
+</aside>
+
+<!-- ===== NAVBAR ===== -->
+<header class="navbar">
+  <button class="menu-toggle" id="menuToggle"><i class="fas fa-bars"></i></button>
+  <div class="search-box">
+    <i class="fas fa-search"></i>
+    <input type="text" placeholder="Search anything..." id="globalSearch">
+  </div>
+  <div class="navbar-actions">
+    <button class="nav-action-btn"><i class="fas fa-bell"></i><span class="badge"></span></button>
+    <button class="nav-action-btn"><i class="fas fa-envelope"></i><span class="badge"></span></button>
+    <div class="user-menu">
+      <div class="avatar">M</div>
+      <span class="name">mugesh</span>
+      <i class="fas fa-chevron-down"></i>
+    </div>
+  </div>
+</header>
+
+<!-- ===== MAIN CONTENT ===== -->
+<main class="main-content">
+
+  <!-- DASHBOARD PAGE -->
+  <section class="page active" id="page-dashboard">
+    <div class="page-header">
+      <h1>Dashboard</h1>
+      <div class="breadcrumb">Home / <a href="#">Dashboard</a></div>
+    </div>
+    <div class="summary-cards" id="dashboardCards"></div>
+    <div class="charts-grid">
+      <div class="chart-card">
+        <h3><i class="fas fa-chart-line"></i> Weekly Appointments</h3>
+        <canvas id="weeklyChart" height="100"></canvas>
+      </div>
+      <div class="chart-card">
+        <h3><i class="fas fa-chart-pie"></i> Appointment Status</h3>
+        <canvas id="statusChart" height="200"></canvas>
+      </div>
+    </div>
+  </section>
+
+  <!-- PATIENTS PAGE -->
+  <section class="page" id="page-patients">
+    <div class="page-header">
+      <h1>Patients</h1>
+      <div class="breadcrumb">Home / <a href="#">Dashboard</a></div>
+    </div>
+    <div class="table-card">
+      <div class="table-header">
+        <h3><i class="fas fa-users"></i> Patients</h3>
+        <div class="table-actions">
+          <div class="search-wrap"><i class="fas fa-search"></i><input class="table-search" placeholder="Search patients..." id="patientSearch"></div>
+          <button class="btn btn-primary" onclick="openModal('patientModal')"><i class="fas fa-plus"></i> Add Patient</button>
+        </div>
+      </div>
+      <div style="overflow-x:auto"><table><thead><tr><th>Name</th><th>Age</th><th>Gender</th><th>Phone</th><th>Blood Group</th><th>Condition</th><th>Doctor</th><th>Status</th><th>Actions</th></tr></thead><tbody id="patientsTable"></tbody></table></div>
+    </div>
+    <div class="desc-panel" id="patientDescPanel" style="display:none">
+      <div class="desc-panel-header">
+        <h3><i class="fas fa-info-circle"></i> Patient Description</h3>
+        <button class="btn btn-sm btn-primary" onclick="printDescription('patient')"><i class="fas fa-print"></i> Print</button>
+      </div>
+      <div class="desc-panel-body" id="patientDescBody"></div>
+    </div>
+  </section>
+
+  <!-- DOCTORS PAGE -->
+  <section class="page" id="page-doctors">
+    <div class="page-header">
+      <h1>Doctors</h1>
+      <div class="breadcrumb">Home / <a href="#">Dashboard</a></div>
+    </div>
+    <div class="table-card">
+      <div class="table-header">
+        <h3><i class="fas fa-user-md"></i> Doctors</h3>
+        <div class="table-actions">
+          <div class="search-wrap"><i class="fas fa-search"></i><input class="table-search" placeholder="Search doctors..." id="doctorSearch"></div>
+          <button class="btn btn-primary" onclick="openModal('doctorModal')"><i class="fas fa-plus"></i> Add Doctor</button>
+        </div>
+      </div>
+      <div style="overflow-x:auto"><table><thead><tr><th>Name</th><th>Specialty</th><th>Phone</th><th>Experience</th><th>Patients</th><th>Rating</th><th>Status</th><th>Actions</th></tr></thead><tbody id="doctorsTable"></tbody></table></div>
+    </div>
+    <div class="desc-panel" id="doctorDescPanel" style="display:none">
+      <div class="desc-panel-header">
+        <h3><i class="fas fa-info-circle"></i> Doctor Description</h3>
+        <button class="btn btn-sm btn-primary" onclick="printDescription('doctor')"><i class="fas fa-print"></i> Print</button>
+      </div>
+      <div class="desc-panel-body" id="doctorDescBody"></div>
+    </div>
+  </section>
+
+  <!-- APPOINTMENTS PAGE -->
+  <section class="page" id="page-appointments">
+    <div class="page-header">
+      <h1>Appointments</h1>
+      <div class="breadcrumb">Home / <a href="#">Dashboard</a></div>
+    </div>
+    <div class="table-card">
+      <div class="table-header">
+        <h3><i class="fas fa-calendar-check"></i> Appointments</h3>
+        <div class="table-actions">
+          <div class="search-wrap"><i class="fas fa-search"></i><input class="table-search" placeholder="Search appointments..." id="appointmentSearch"></div>
+          <button class="btn btn-primary" onclick="openModal('appointmentModal')"><i class="fas fa-plus"></i> New Appointment</button>
+        </div>
+      </div>
+      <div style="overflow-x:auto"><table><thead><tr><th>Patient</th><th>Doctor</th><th>Date</th><th>Time</th><th>Type</th><th>Status</th><th>Actions</th></tr></thead><tbody id="appointmentsTable"></tbody></table></div>
+    </div>
+    <div class="desc-panel" id="appointmentDescPanel" style="display:none">
+      <div class="desc-panel-header">
+        <h3><i class="fas fa-info-circle"></i> Appointment Details</h3>
+        <button class="btn btn-sm btn-primary" onclick="printDescription('appointment')"><i class="fas fa-print"></i> Print</button>
+      </div>
+      <div class="desc-panel-body" id="appointmentDescBody"></div>
+    </div>
+  </section>
+
+  <!-- PRESCRIPTIONS PAGE -->
+  <section class="page" id="page-prescriptions">
+    <div class="page-header">
+      <h1>Prescriptions</h1>
+      <div class="breadcrumb">Home / <a href="#">Dashboard</a></div>
+    </div>
+    <div class="table-card">
+      <div class="table-header">
+        <h3><i class="fas fa-prescription-bottle-alt"></i> Prescriptions</h3>
+        <div class="table-actions">
+          <div class="search-wrap"><i class="fas fa-search"></i><input class="table-search" placeholder="Search prescriptions..." id="prescriptionSearch"></div>
+          <button class="btn btn-primary" onclick="openModal('prescriptionModal')"><i class="fas fa-plus"></i> Write Prescription</button>
+        </div>
+      </div>
+      <div style="overflow-x:auto"><table><thead><tr><th>RX ID</th><th>Patient</th><th>Doctor</th><th>Diagnosis</th><th>Date</th><th>Duration</th><th>Status</th><th>Actions</th></tr></thead><tbody id="prescriptionsTable"></tbody></table></div>
+    </div>
+  </section>
+
+  <!-- BILLING PAGE -->
+  <section class="page" id="page-billing">
+    <div class="page-header">
+      <h1>Billing</h1>
+      <div class="breadcrumb">Home / <a href="#">Dashboard</a></div>
+    </div>
+    <div class="summary-cards" id="billingCards"></div>
+    <div class="table-card">
+      <div class="table-header">
+        <h3><i class="fas fa-file-invoice-dollar"></i> Invoices</h3>
+        <div class="table-actions">
+          <div class="search-wrap"><i class="fas fa-search"></i><input class="table-search" placeholder="Search invoices..." id="billingSearch"></div>
+          <button class="btn btn-primary" onclick="openModal('billingModal')"><i class="fas fa-plus"></i> New Invoice</button>
+        </div>
+      </div>
+      <div style="overflow-x:auto"><table><thead><tr><th>Invoice</th><th>Patient</th><th>Date</th><th>Description</th><th>Amount</th><th>Method</th><th>Status</th><th>Actions</th></tr></thead><tbody id="billingTable"></tbody></table></div>
+    </div>
+  </section>
+
+  <!-- REPORTS PAGE -->
+  <section class="page" id="page-reports">
+    <div class="page-header">
+      <h1>Reports</h1>
+      <div class="breadcrumb">Home / <a href="#">Dashboard</a></div>
+    </div>
+    <div class="summary-cards" id="reportCards"></div>
+    <div class="reports-grid">
+      <div class="report-card">
+        <h3><i class="fas fa-hospital"></i> Patients by Department</h3>
+        <div class="dept-bars" id="deptBars"></div>
+      </div>
+      <div class="report-card">
+        <h3><i class="fas fa-clipboard-list"></i> Summary</h3>
+        <ul class="summary-list" id="summaryList"></ul>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<!-- ===== MODALS ===== -->
+
+<!-- Patient Modal -->
+<div class="modal-overlay" id="patientModal">
+  <div class="modal">
+    <div class="modal-header"><h3>Add Patient</h3><button class="modal-close" onclick="closeModal('patientModal')">&times;</button></div>
+    <div class="modal-body">
+      <div class="form-row">
+        <div class="form-group"><label>Full Name</label><input type="text" id="pName" placeholder="Enter name"></div>
+        <div class="form-group"><label>Age</label><input type="number" id="pAge" placeholder="Age"></div>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label>Gender</label><select id="pGender"><option>Male</option><option>Female</option><option>Other</option></select></div>
+        <div class="form-group"><label>Phone</label><input type="text" id="pPhone" placeholder="Phone number"></div>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label>Blood Group</label><select id="pBlood"><option>A+</option><option>A-</option><option>B+</option><option>B-</option><option>O+</option><option>O-</option><option>AB+</option><option>AB-</option></select></div>
+        <div class="form-group"><label>Assigned Doctor</label><select id="pDoctor"></select></div>
+      </div>
+      <div class="form-group"><label>Condition</label><input type="text" id="pCondition" placeholder="Medical condition"></div>
+      <div class="form-group"><label>Description</label><textarea id="pDesc" placeholder="Detailed patient description..."></textarea></div>
+    </div>
+    <div class="modal-footer"><button class="btn" onclick="closeModal('patientModal')">Cancel</button><button class="btn btn-primary" onclick="addPatient()"><i class="fas fa-save"></i> Save</button></div>
+  </div>
+</div>
+
+<!-- Doctor Modal -->
+<div class="modal-overlay" id="doctorModal">
+  <div class="modal">
+    <div class="modal-header"><h3>Add Doctor</h3><button class="modal-close" onclick="closeModal('doctorModal')">&times;</button></div>
+    <div class="modal-body">
+      <div class="form-row">
+        <div class="form-group"><label>Full Name</label><input type="text" id="dName" placeholder="Dr. ..."></div>
+        <div class="form-group"><label>Specialty</label><select id="dSpecialty"><option>Cardiology</option><option>Neurology</option><option>Orthopedics</option><option>Pediatrics</option><option>Dermatology</option><option>General Surgery</option></select></div>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label>Phone</label><input type="text" id="dPhone" placeholder="Phone number"></div>
+        <div class="form-group"><label>Experience</label><input type="text" id="dExp" placeholder="e.g. 5 years"></div>
+      </div>
+      <div class="form-group"><label>Description</label><textarea id="dDesc" placeholder="Doctor bio and specialization details..."></textarea></div>
+    </div>
+    <div class="modal-footer"><button class="btn" onclick="closeModal('doctorModal')">Cancel</button><button class="btn btn-primary" onclick="addDoctor()"><i class="fas fa-save"></i> Save</button></div>
+  </div>
+</div>
+
+<!-- Appointment Modal -->
+<div class="modal-overlay" id="appointmentModal">
+  <div class="modal">
+    <div class="modal-header"><h3>New Appointment</h3><button class="modal-close" onclick="closeModal('appointmentModal')">&times;</button></div>
+    <div class="modal-body">
+      <div class="form-row">
+        <div class="form-group"><label>Patient</label><select id="aPatient"></select></div>
+        <div class="form-group"><label>Doctor</label><select id="aDoctor"></select></div>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label>Date</label><input type="date" id="aDate"></div>
+        <div class="form-group"><label>Time</label><input type="time" id="aTime"></div>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label>Type</label><select id="aType"><option>Checkup</option><option>Emergency</option><option>Follow-up</option></select></div>
+        <div class="form-group"><label>Status</label><select id="aStatus"><option>Confirmed</option><option>Pending</option></select></div>
+      </div>
+      <div class="form-group"><label>Description</label><textarea id="aDesc" placeholder="Appointment notes..."></textarea></div>
+    </div>
+    <div class="modal-footer"><button class="btn" onclick="closeModal('appointmentModal')">Cancel</button><button class="btn btn-primary" onclick="addAppointment()"><i class="fas fa-save"></i> Save</button></div>
+  </div>
+</div>
+
+<!-- Prescription Modal -->
+<div class="modal-overlay" id="prescriptionModal">
+  <div class="modal">
+    <div class="modal-header"><h3>Write Prescription</h3><button class="modal-close" onclick="closeModal('prescriptionModal')">&times;</button></div>
+    <div class="modal-body">
+      <div class="form-row">
+        <div class="form-group"><label>Patient</label><select id="rxPatient"></select></div>
+        <div class="form-group"><label>Doctor</label><select id="rxDoctor"></select></div>
+      </div>
+      <div class="form-group"><label>Diagnosis</label><input type="text" id="rxDiag" placeholder="Diagnosis"></div>
+      <div class="form-group"><label>Medications (one per line)</label><textarea id="rxMeds" placeholder="Amlodipine 5mg - Once daily morning"></textarea></div>
+      <div class="form-row">
+        <div class="form-group"><label>Duration</label><input type="text" id="rxDur" placeholder="e.g. 30 days"></div>
+        <div class="form-group"><label>Follow-up Date</label><input type="date" id="rxFollow"></div>
+      </div>
+      <div class="form-group"><label>Description / Notes</label><textarea id="rxDesc" placeholder="Additional notes..."></textarea></div>
+    </div>
+    <div class="modal-footer"><button class="btn" onclick="closeModal('prescriptionModal')">Cancel</button><button class="btn btn-primary" onclick="addPrescription()"><i class="fas fa-save"></i> Save</button></div>
+  </div>
+</div>
+
+<!-- Billing Modal -->
+<div class="modal-overlay" id="billingModal">
+  <div class="modal">
+    <div class="modal-header"><h3>New Invoice</h3><button class="modal-close" onclick="closeModal('billingModal')">&times;</button></div>
+    <div class="modal-body">
+      <div class="form-row">
+        <div class="form-group"><label>Patient</label><select id="bPatient"></select></div>
+        <div class="form-group"><label>Date</label><input type="date" id="bDate"></div>
+      </div>
+      <div class="form-group"><label>Description</label><input type="text" id="bDescInput" placeholder="Service description"></div>
+      <div class="form-row">
+        <div class="form-group"><label>Amount ($)</label><input type="number" id="bAmount" placeholder="Amount"></div>
+        <div class="form-group"><label>Payment Method</label><select id="bMethod"><option>Cash</option><option>Credit Card</option><option>Insurance</option><option>UPI</option></select></div>
+      </div>
+      <div class="form-group"><label>Status</label><select id="bStatus"><option>Paid</option><option>Pending</option></select></div>
+    </div>
+    <div class="modal-footer"><button class="btn" onclick="closeModal('billingModal')">Cancel</button><button class="btn btn-primary" onclick="addInvoice()"><i class="fas fa-save"></i> Save</button></div>
+  </div>
+</div>
+
+<!-- Edit Appointment Modal -->
+<div class="modal-overlay" id="editAppointmentModal">
+  <div class="modal">
+    <div class="modal-header"><h3>Edit Appointment</h3><button class="modal-close" onclick="closeModal('editAppointmentModal')">&times;</button></div>
+    <div class="modal-body">
+      <div class="form-group"><label>Patient</label><input type="text" id="eaPatient" readonly style="background:var(--bg)"></div>
+      <div class="form-group"><label>Doctor</label><input type="text" id="eaDoctor" readonly style="background:var(--bg)"></div>
+      <div class="form-row">
+        <div class="form-group"><label>Date</label><input type="date" id="eaDate"></div>
+        <div class="form-group"><label>Time</label><input type="time" id="eaTime"></div>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label>Type</label><select id="eaType"><option>Checkup</option><option>Emergency</option><option>Follow-up</option></select></div>
+        <div class="form-group"><label>Status</label><select id="eaStatus"><option>Confirmed</option><option>Pending</option><option>Cancelled</option></select></div>
+      </div>
+      <div class="form-group"><label>Notes</label><textarea id="eaDesc" placeholder="Update appointment notes..."></textarea></div>
+    </div>
+    <div class="modal-footer"><button class="btn" onclick="closeModal('editAppointmentModal')">Cancel</button><button class="btn btn-primary" onclick="saveEditAppointment()"><i class="fas fa-save"></i> Update</button></div>
+  </div>
+</div>
+
+<!-- Edit Doctor Status Modal -->
+<div class="modal-overlay" id="editDoctorModal">
+  <div class="modal">
+    <div class="modal-header"><h3>Update Doctor Status</h3><button class="modal-close" onclick="closeModal('editDoctorModal')">&times;</button></div>
+    <div class="modal-body">
+      <div class="form-group"><label>Doctor</label><input type="text" id="edName" readonly style="background:var(--bg)"></div>
+      <div class="form-group"><label>Specialty</label><input type="text" id="edSpecialty" readonly style="background:var(--bg)"></div>
+      <div class="form-group"><label>Current Availability</label>
+        <select id="edStatus">
+          <option value="Active">✅ Available</option>
+          <option value="On Leave">🏖️ On Leave</option>
+          <option value="Consulting">🩺 Consulting Patient</option>
+          <option value="In Emergency">🚨 In Emergency Ward</option>
+          <option value="In Surgery">🏥 In Surgery</option>
+          <option value="Off Duty">🌙 Off Duty</option>
+          <option value="Inactive">❌ Inactive</option>
+        </select>
+      </div>
+      <div class="form-group"><label>Notes</label><textarea id="edNotes" placeholder="Add status update notes..."></textarea></div>
+    </div>
+    <div class="modal-footer"><button class="btn" onclick="closeModal('editDoctorModal')">Cancel</button><button class="btn btn-primary" onclick="saveEditDoctor()"><i class="fas fa-save"></i> Update Status</button></div>
+  </div>
+</div>
+
+<!-- Print Preview Modal -->
+<div class="modal-overlay" id="printModal">
+  <div class="print-preview">
+    <div class="print-content" id="printContent"></div>
+    <div class="print-actions">
+      <button class="btn" onclick="closeModal('printModal')">Close</button>
+      <button class="btn btn-primary" onclick="window.print()"><i class="fas fa-print"></i> Print</button>
+    </div>
+  </div>
+</div>
+
+<script src="js/data.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>

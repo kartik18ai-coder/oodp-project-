@@ -1,0 +1,4 @@
+[
+  {"id":"D-001","name":"Dr. Sarah Wilson","specialty":"Cardiology","phone":"(555) 111-2222","experience":"12 years","patients":45,"rating":4.9,"status":"Active","description":"Board-certified cardiologist."},
+  {"id":"D-002","name":"Dr. James Chen","specialty":"Neurology","phone":"(555) 222-3333","experience":"8 years","patients":38,"rating":4.8,"status":"Active","description":"Neurologist specializing in headache disorders."}
+]

@@ -1,0 +1,4 @@
+[
+  {"id":"P-001","name":"John Smith","age":45,"gender":"Male","phone":"(555) 123-4567","bloodGroup":"A+","condition":"Hypertension Stage 2","doctor":"Dr. Sarah Wilson","status":"Active","description":"Chronic hypertension requiring regular monitoring."},
+  {"id":"P-002","name":"Emma Davis","age":32,"gender":"Female","phone":"(555) 234-5678","bloodGroup":"B+","condition":"Diabetes Type 2","doctor":"Dr. James Chen","status":"Active","description":"Type 2 Diabetes managed with Metformin."}
+]
